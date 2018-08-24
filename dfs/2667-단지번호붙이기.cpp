@@ -7,24 +7,24 @@ int now = -1;
 int ave[626];
 int n = 0;
 
-int bfs(int x, int y) {
+int dfs(int x, int y) {
 	ave[now]++;
 
 	if (x > 0 && apt[x - 1][y] == 1) {
 		apt[x - 1][y] = 0;
-		bfs(x - 1, y);
+		dfs(x - 1, y);
 	}
 	if (x + 1 < n  && apt[x + 1][y] == 1) {
 		apt[x + 1][y] = 0;
-		bfs(x + 1, y);
+		dfs(x + 1, y);
 	}
 	if (y > 0 && apt[x][y - 1] == 1) {
 		apt[x][y - 1] = 0;
-		bfs(x, y - 1);
+		dfs(x, y - 1);
 	}
 	if (y + 1 < n && apt[x][y + 1] == 1) {
 		apt[x][y + 1] = 0;
-		bfs(x, y + 1);
+		dfs(x, y + 1);
 	}
 	return 0;
 }
@@ -54,7 +54,7 @@ int main() {
 			if (apt[i][j] == 1) {
 				now++;
 				apt[i][j] = 0;
-				bfs(i, j);
+				dfs(i, j);
 			}
 		}
 	}
