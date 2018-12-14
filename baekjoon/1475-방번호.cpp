@@ -17,7 +17,6 @@ int main() {
 	}
 
 	for (int i = 0; i < 9; i++) {
-		printf("%d %d\n", i, num[i]);
 		if (i==6) {
 			if ((num[i] + 1) / 2 > big) {
 				big = (num[i] + 1) / 2;
