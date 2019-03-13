@@ -4,6 +4,8 @@ int n, m;
 char map[12][12];
 int min_move = -1;
 int x1, y1, x2, y2, gx, gy;
+int visr[12][12] = { 0, };
+int visb[12][12]={0, };
 
 int min(int a, int b) {
 	if (a > b) return b;
@@ -12,9 +14,6 @@ int min(int a, int b) {
 
 void move(int rx, int ry, int bx, int by, int moves) {
 	//stop recursion
-	if (moves > 10 || ( min_move != -1 && moves > min_move )) {
-		return;
-	}
 	if (bx == gx && by == gy) {
 		return;
 	}
@@ -27,6 +26,10 @@ void move(int rx, int ry, int bx, int by, int moves) {
 		}
 		return;
 	}
+	if (moves >= 10 || ( min_move != -1 && moves > min_move )) {
+			return;
+		}
+
 
 	int mrx, mry, mbx, mby; 
 	bool stopr, stopb;
@@ -67,13 +70,16 @@ void move(int rx, int ry, int bx, int by, int moves) {
 			stopb = true;
 		}
 		
-		printf("%d %d \n", stopr, stopb);
 		if (stopr && stopb) {
 			break;
 		}
 	}
-	printf("%d : moved left %d %d %d %d \n", moves + 1, rx, mry, bx, mby);
-	move(rx, mry, bx, mby, moves + 1);
+	
+	if ( !visr[rx][mry] && !visb[bx][mby] && ( ry != mry || by != mby) ) {
+		visr[rx][mry] = 1; visb[bx][mby] = 1;
+		printf("%d : moved left %d %d %d %d -> %d %d %d %d \n", moves + 1, rx, ry, bx, by, rx, mry, bx, mby);
+		move(rx, mry, bx, mby, moves + 1); 
+	}
 	
 	
 	//move right
@@ -116,8 +122,12 @@ void move(int rx, int ry, int bx, int by, int moves) {
 			break;
 		}
 	}
-	printf("%d : moved right %d %d %d %d \n", moves + 1, rx, mry, bx, mby);
-	move(rx, mry, bx, mby, moves + 1);
+	
+	if (!visr[rx][mry] && !visb[bx][mby] && (ry!=mry || by != mby)) {
+		visr[rx][mry] = 1; visb[bx][mby] = 1;
+		printf("%d : moved right %d %d %d %d -> %d %d %d %d \n", moves + 1,rx,ry,bx,by, rx, mry, bx, mby);
+		move(rx, mry, bx, mby, moves + 1); 
+	}
 	
 
 	mry = ry; mby = by;
@@ -162,8 +172,11 @@ void move(int rx, int ry, int bx, int by, int moves) {
 			break;
 		}
 	}
-	printf("%d : moved up %d %d %d %d -> %d %d %d %d  \n", moves + 1,rx,ry,bx,by, mrx, ry, mbx, by);
-	move(mrx, ry, mbx, by, moves + 1);
+	if (!visr[mrx][ry] &&!visb[mbx][by] && (rx != mrx || bx != mbx)) {
+		visr[mrx][ry] = 1; visb[mbx][by] = 1;
+		printf("%d : moved up %d %d %d %d -> %d %d %d %d  \n", moves + 1, rx, ry, bx, by, mrx, ry, mbx, by); 
+		move(mrx, ry, mbx, by, moves + 1); 
+	}
 	
 	//move down
 
@@ -206,8 +219,12 @@ void move(int rx, int ry, int bx, int by, int moves) {
 			break;
 		}
 	}
-	printf("%d : moved down %d %d %d %d -> %d %d %d %d  \n", moves + 1, rx, ry, bx, by, mrx, ry, mbx, by);
-	move(mrx, ry, mbx, by, moves + 1);
+	
+	if (!visr[mrx][ry] && !visb[mbx][by] && (rx != mrx || bx != mbx)) {
+		visr[mrx][ry] = 1; visb[mbx][by] = 1;
+		printf("%d : moved down %d %d %d %d -> %d %d %d %d  \n", moves + 1, rx, ry, bx, by, mrx, ry, mbx, by); 
+		move(mrx, ry, mbx, by, moves + 1);
+	}
 	
 }
 
